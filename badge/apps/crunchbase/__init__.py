@@ -21,11 +21,11 @@ TILE_COLOR = brushes.color(10, 42, 76)
 TILE_GLOW = brushes.color(32, 110, 173, 140)
 TEXT_COLOR = brushes.color(200, 234, 255)
 ICON_ALPHA_ACTIVE = 255
-ICON_SCALE = 4.5
-SPIN_SPEED = 140
+SPIN_SPEED = 200
+ICON_MIN_WIDTH = 0.14
 
-icon_image = Image.load("assets/cbuddy.png")
-squircle = shapes.squircle(-28, -28, 56, 6)
+icon_image = Image.load("icon.png")
+squircle = shapes.squircle(-16, -16, 32, 6)
 
 screen_font = PixelFont.load("/system/assets/fonts/absolute.ppf")
 
@@ -43,19 +43,19 @@ def draw_logo():
     phase = io.ticks / SPIN_SPEED
     width_raw = round(math.cos(phase) * 5) / 5
     if width_raw >= 0:
-        width_factor = max(0.14, width_raw)
+        width_factor = max(ICON_MIN_WIDTH, width_raw)
     else:
-        width_factor = min(-0.14, width_raw)
+        width_factor = min(-ICON_MIN_WIDTH, width_raw)
 
-    sprite_width = icon_image.width * ICON_SCALE * width_factor
-    sprite_height = icon_image.height * ICON_SCALE
+    sprite_width = icon_image.width * width_factor
+    sprite_height = icon_image.height
     sprite_offset = abs(sprite_width) / 2
 
     centre_x = 80
-    centre_y = 58
+    centre_y = 62
 
     # subtle glow behind the icon
-    squircle.transform = Matrix().translate(centre_x, centre_y).scale(1.35, 1.35)
+    squircle.transform = Matrix().translate(centre_x, centre_y).scale(1.5, 1.5)
     screen.brush = TILE_GLOW
     screen.draw(squircle)
 
