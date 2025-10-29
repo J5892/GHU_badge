@@ -4,15 +4,26 @@ import os
 sys.path.insert(0, "/system/apps/crunchbase")
 os.chdir("/system/apps/crunchbase")
 
-from badgeware import screen, brushes, shapes, io, run, SpriteSheet, PixelFont
+from badgeware import (
+    Image,
+    PixelFont,
+    SpriteSheet,
+    brushes,
+    io,
+    run,
+    screen,
+    shapes,
+)
 
-BACKGROUND = brushes.color(4, 12, 26)
-FOREGROUND = brushes.color(255, 255, 255)
+FRAME_COUNT = 24
+BACKGROUND = brushes.color(6, 18, 34)
+TEXT_COLOR = brushes.color(200, 234, 255)
 
-logo_sheet = SpriteSheet("assets/crunchbase-rot.png", 6, 4)
+logo_sheet = SpriteSheet("assets/crunchbase-spin.png", FRAME_COUNT, 1)
 logo_animation = logo_sheet.animation()
-font = PixelFont.load("/system/assets/fonts/absolute.ppf")
-screen.font = font
+
+screen.font = PixelFont.load("/system/assets/fonts/absolute.ppf")
+screen.antialias = Image.X2
 
 
 def draw_background():
@@ -20,21 +31,26 @@ def draw_background():
     screen.draw(shapes.rectangle(0, 0, screen.width, screen.height))
 
 
-def update():
-    draw_background()
-
-    frame_time = io.ticks / 120
+def draw_logo():
+    # io.ticks increases with time; dividing controls spin speed
+    frame_time = io.ticks / 110
     frame = logo_animation.frame(frame_time)
+    x = (screen.width - frame.width) // 2
+    y = (screen.height - frame.height) // 2 - 6
+    screen.blit(frame, x, y)
 
-    x = (screen.width - frame.width) / 2
-    y = (screen.height - frame.height) / 2 - 6
-    screen.blit(frame, int(x), int(y))
 
-    screen.brush = FOREGROUND
-    label = "Crunchbase"
+def draw_caption():
+    screen.brush = TEXT_COLOR
+    label = "crunchbase"
     width, height = screen.measure_text(label)
     screen.text(label, 80 - (width / 2), screen.height - height - 6)
 
+
+def update():
+    draw_background()
+    draw_logo()
+    draw_caption()
     return None
 
 
