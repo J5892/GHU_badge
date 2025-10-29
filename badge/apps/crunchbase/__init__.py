@@ -48,9 +48,9 @@ def draw_caption():
 
 
 def update():
-    draw_background()
-    draw_logo()
-    draw_caption()
+    # draw_background()
+    # draw_logo()
+    # draw_caption()
     return None
 
 
